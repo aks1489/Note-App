@@ -9,6 +9,8 @@ export default function Main(){
     const [notes, setNotes] = useState( () => JSON.parse(localStorage.getItem("notes")) || [])
     const [currentNoteId, setCurrentNoteId] = useState((notes[0] && notes[0].id) || "")
 
+    const currentNote = notes.find(note => { return note.id === currentNoteId }) || notes[0]
+
     useEffect(() => {
         localStorage.setItem("notes",JSON.stringify(notes))
     }, [notes])
@@ -52,12 +54,6 @@ export default function Main(){
         setNotes((prvArray) => prvArray.filter((note => note.id !==  noteId)))
     }
 
-    function findCurrentNote() {
-        return notes.find(note => { 
-            return note.id === currentNoteId 
-        }) || notes[0]
-    }
-    
     return (
         <main>
         {
@@ -70,7 +66,7 @@ export default function Main(){
             >
                 <Sidebar
                     notes={notes}
-                    currentNote={findCurrentNote()}
+                    currentNote={currentNote}
                     setCurrentNoteId={setCurrentNoteId}
                     newNote={createNewNote}
                     deleteNote={deleteNote}
@@ -79,7 +75,7 @@ export default function Main(){
                     currentNoteId && 
                     notes.length > 0 &&
                     <Editor 
-                        currentNote={findCurrentNote()} 
+                        currentNote={currentNote} 
                         updateNote={updateNote} 
                     />
                 }
