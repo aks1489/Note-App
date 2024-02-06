@@ -74,9 +74,16 @@ button:focus {
 }
 
 .mde-header{
-  max-height: 4.5vh;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
+@media (max-width: 725px) {
+  .mde-header{
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
 .title {
   overflow: hidden;
   width: 100%;
