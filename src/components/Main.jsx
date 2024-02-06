@@ -22,11 +22,28 @@ export default function Main(){
         setCurrentNoteId(newNote.id)
     }
     
+    //Note update and update to top
     function updateNote(text) {
-        setNotes(oldNotes => oldNotes.map(oldNote => {
-            return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote
-        }))
+        setNotes(oldNotes =>  {
+            const newArray = []
+            for(let i = 0; i<oldNotes.length; i++){
+                const oldNote = oldNotes[i];
+                if(oldNote.id === currentNoteId){
+                    newArray.unshift({...oldNote, body: text})
+                }else{
+                    newArray.push(oldNote)
+                }
+            }
+            return newArray;
+        })
     }
+
+    // Not gonna rearrange itself  <------
+    // function updateNote(text) {
+    //     setNotes(oldNotes => oldNotes.map(oldNote => {
+    //         return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote
+    //     }))
+    // }
     
     function findCurrentNote() {
         return notes.find(note => { 
