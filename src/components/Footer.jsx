@@ -1,7 +1,7 @@
-export default function Footer() {
+export default function Footer(props) {
     return(
-        <footer>
-            <h4>Made With ❤️</h4>
+        <footer className={props.theme}>
+            <h4 className={props.theme}>Made With ❤️</h4>
         </footer>
     )
 } 

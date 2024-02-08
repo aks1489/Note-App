@@ -1,7 +1,7 @@
-export default function Header() {
+export default function Header(props) {
     return(
-            <nav>
-                <h2>Note MED</h2>
+            <nav className={props.theme}>
+                <h2 className={props.theme} onClick={props.handleTheme}>Note MED</h2>
             </nav>
     )
 }

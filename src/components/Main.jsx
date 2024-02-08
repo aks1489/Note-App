@@ -4,7 +4,8 @@ import Editor from "./mainComponents/Editor"
 import Split from "react-split"
 import {nanoid} from "nanoid"
 
-export default function Main(){
+export default function Main(props){
+    const theme = props.theme
     const [notes, setNotes] = useState( () => JSON.parse(localStorage.getItem("notes")) || [])
     const [currentNoteId, setCurrentNoteId] = useState((notes[0] && notes[0].id) || "")
 
@@ -69,6 +70,7 @@ export default function Main(){
                     setCurrentNoteId={setCurrentNoteId}
                     newNote={createNewNote}
                     deleteNote={deleteNote}
+                    theme={theme}
                 />
                 {
                     currentNoteId && 
@@ -80,8 +82,8 @@ export default function Main(){
                 }
             </Split>
             :
-            <div className="no-notes">
-                <h1>You have no notes</h1>
+            <div className={`no-notes ${theme}`}>
+                <h1 className={theme}>You have no notes</h1>
                 <button 
                     className="first-note" 
                     onClick={createNewNote}

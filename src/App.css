@@ -236,3 +236,48 @@ footer > h4 {
     height: 28px;
   }
 }
+
+/* dark mode */
+
+/* header */
+nav.dark {
+  background-color: #404258;
+}
+
+nav > h2.dark {
+  color: white;
+}
+
+/* Main section  */
+
+.no-notes.dark {
+  background-color: #6B728E;
+}
+
+.no-notes > h1.dark{
+  color: white;
+}
+
+.sidebar.dark{
+  background-color: #6B728E;
+}
+
+.sidebar--header > h3.dark {
+  color: #eee;
+}
+
+.text-snippet.dark{
+  color: #eee;
+}
+
+
+
+/* Footer */
+
+footer.dark {
+  background-color: #404258
+}
+
+footer > h4.dark {
+  color: white;
+}
