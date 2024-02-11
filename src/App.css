@@ -339,6 +339,15 @@ footer > h4 {
   }
 }
 
+footer > h4 > .credit {
+  margin: 0;
+  font-size: 90%;
+  background-color: black;
+  border-radius: 10px;
+  color: #eee;
+  padding: 1px 10px;
+}
+
 /* dark mode */
 
 /* header */
@@ -382,4 +391,9 @@ footer.dark {
 
 footer > h4.dark {
   color: white;
+}
+
+footer > h4 > .credit.dark {
+  background-color: #eee;
+  color: black;
 }
