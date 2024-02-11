@@ -4,10 +4,10 @@ export default function Header(props) {
     return(
             <nav className={theme}>
                 <h2 className={theme} >Note MED</h2>
-                <label class="ui-switch">
-                    <input type="checkbox" checked={theme} onClick={handleTheme}/>
-                    <div class="slider">
-                        <div class="circle"></div>
+                <label className="ui-switch">
+                    <input type="checkbox" checked={theme} onChange={handleTheme}/>
+                    <div className="slider">
+                        <div className="circle"></div>
                     </div>
                 </label>
             </nav>
