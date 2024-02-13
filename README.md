@@ -1,3 +1,3 @@
 # React Note App
 
-## Under Devlopment 🏗️
+## Uses Local storage to store data
