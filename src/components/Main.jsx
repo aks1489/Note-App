@@ -2,58 +2,55 @@ import { useEffect, useState } from "react"
 import Sidebar from "./mainComponents/Sidebar"
 import Editor from "./mainComponents/Editor"
 import Split from "react-split"
-import {nanoid} from "nanoid"
+// import {nanoid} from "nanoid"
+import {addDoc, deleteDoc, doc, onSnapshot, setDoc} from "firebase/firestore"
+import { notesCollection, db } from "../../firebase"
 
 export default function Main(props){
     const theme = props.theme
-    const [notes, setNotes] = useState( () => JSON.parse(localStorage.getItem("notes")) || [])
-    const [currentNoteId, setCurrentNoteId] = useState((notes[0] && notes[0].id) || "")
-
+    const [notes, setNotes] = useState([])
+    const [currentNoteId, setCurrentNoteId] = useState("")
+    console.log(currentNoteId)
     const currentNote = notes.find(note => { return note.id === currentNoteId }) || notes[0]
 
     useEffect(() => {
-        localStorage.setItem("notes",JSON.stringify(notes))
+        // localStorage.setItem("notes",JSON.stringify(notes)) --------> saving the data from local storage
+        const unsubscribe = onSnapshot(notesCollection, (snapshot) => {
+            // Sync up our local notes array with the snapshot data
+            const newArr = snapshot.docs.map(doc => ({
+                ...doc.data(),
+                id: doc.id
+            }))
+            setNotes(newArr)
+        })
+        return unsubscribe
+    }, [])
+    useEffect(() => {
+        if(!currentNoteId){
+            setCurrentNoteId(notes[0]?.id)
+        }
     }, [notes])
 
-    function createNewNote() {
+    async function createNewNote() {  // ------< create new
         const newNote = {
-            id: nanoid(),
             body: "# Type your markdown note's title here"
         }
-        setNotes(prevNotes => [newNote, ...prevNotes])
-        setCurrentNoteId(newNote.id)
+        // setNotes(prevNotes => [newNote, ...prevNotes])
+        const newNoteRef =  await addDoc(notesCollection, newNote)
+        setCurrentNoteId(newNoteRef.id)
     }
     
-    //Note update and update to top
-    function updateNote(text) {
-        setNotes(oldNotes =>  {
-            const newArray = []
-            for(let i = 0; i<oldNotes.length; i++){
-                const oldNote = oldNotes[i];
-                if(oldNote.id === currentNoteId){
-                    newArray.unshift({...oldNote, body: text})
-                }else{
-                    newArray.push(oldNote)
-                }
-            }
-            return newArray;
-        })
+    //Note heading name setting and update to sidebar from firebase
+    async function updateNote(text) {
+        const docRef = doc(db, "notes", currentNoteId);
+        await setDoc(docRef, { body: text }, { merge: true })
     }
 
-    // Not gonna rearrange itself  <------
-    // function updateNote(text) {
-    //     setNotes(oldNotes => oldNotes.map(oldNote => {
-    //         return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote
-    //     }))
-    // }
-    
-    function deleteNote(event, noteId) {
-        event.stopPropagation()
-        //  deleting a specific note 
-        // console.log(`Succesfuly deleted ${noteId}`) ////-----> uncomment to see the deleted note id
-        setNotes((prvArray) => prvArray.filter((note => note.id !==  noteId)))
+    // Using Firebase deleting note >--------
+    async function deleteNote(noteId) {
+        const docRef = doc(db, "notes", noteId);
+        await deleteDoc(docRef)
     }
-
     return (
         <main>
         {
@@ -72,14 +69,10 @@ export default function Main(props){
                     deleteNote={deleteNote}
                     theme={theme}
                 />
-                {
-                    currentNoteId && 
-                    notes.length > 0 &&
-                    <Editor 
-                        currentNote={currentNote} 
-                        updateNote={updateNote} 
-                    />
-                }
+                <Editor 
+                    currentNote={currentNote} 
+                    updateNote={updateNote} 
+                />
             </Split>
             :
             <div className={`no-notes ${theme}`}>
