@@ -10,8 +10,9 @@ export default function Main(props){
     const theme = props.theme
     const [notes, setNotes] = useState([])
     const [currentNoteId, setCurrentNoteId] = useState("")
-    console.log(currentNoteId)
+    console.log(notes)
     const currentNote = notes.find(note => { return note.id === currentNoteId }) || notes[0]
+    const shortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt)
 
     useEffect(() => {
         // localStorage.setItem("notes",JSON.stringify(notes)) --------> saving the data from local storage
@@ -33,7 +34,9 @@ export default function Main(props){
 
     async function createNewNote() {  // ------< create new
         const newNote = {
-            body: "# Type your markdown note's title here"
+            body: "# Type your markdown note's title here",
+            cereatedAt: Date.now(),
+            updatedAt: Date.now()
         }
         // setNotes(prevNotes => [newNote, ...prevNotes])
         const newNoteRef =  await addDoc(notesCollection, newNote)
@@ -43,7 +46,7 @@ export default function Main(props){
     //Note heading name setting and update to sidebar from firebase
     async function updateNote(text) {
         const docRef = doc(db, "notes", currentNoteId);
-        await setDoc(docRef, { body: text }, { merge: true })
+        await setDoc(docRef, { body: text, updatedAt: Date.now() }, { merge: true })
     }
 
     // Using Firebase deleting note >--------
@@ -62,7 +65,7 @@ export default function Main(props){
                 className="split"
             >
                 <Sidebar
-                    notes={notes}
+                    notes={shortedNotes}
                     currentNote={currentNote}
                     setCurrentNoteId={setCurrentNoteId}
                     newNote={createNewNote}
