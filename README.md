@@ -78,3 +78,6 @@ This site was served using [Netlify](https://www.netlify.com/)
 - [showdown](https://www.npmjs.com/package/showdown)
 - [firebase](https://www.npmjs.com/package/firebase)
 
+# Donate me
+
+<a href='https://ko-fi.com/T6T5UIQ1W' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
