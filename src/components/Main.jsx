@@ -13,6 +13,8 @@ export default function Main(props){
     console.log(notes)
     const currentNote = notes.find(note => { return note.id === currentNoteId }) || notes[0]
     const shortedNotes = notes.sort((a, b) => b.updatedAt - a.updatedAt)
+    const [tempNoteText, setTempNoteText] = useState("")
+
 
     useEffect(() => {
         // localStorage.setItem("notes",JSON.stringify(notes)) --------> saving the data from local storage
@@ -26,11 +28,29 @@ export default function Main(props){
         })
         return unsubscribe
     }, [])
+
+
     useEffect(() => {
         if(!currentNoteId){
             setCurrentNoteId(notes[0]?.id)
         }
     }, [notes])
+    
+    useEffect(() => {
+        if(currentNote){
+            setTempNoteText(currentNote.body)
+        }
+    }, [currentNote])
+
+    // run when temp note changes and update the temp note to firebase
+    useEffect(()=> {
+        const timeOut = setTimeout(() => {
+            if(tempNoteText !== currentNote.body){
+                updateNote(tempNoteText)
+            }
+        }, 500);
+        return () => clearTimeout(timeOut)
+    }, [tempNoteText])
 
     async function createNewNote() {  // ------< create new
         const newNote = {
@@ -72,9 +92,11 @@ export default function Main(props){
                     deleteNote={deleteNote}
                     theme={theme}
                 />
-                <Editor 
-                    currentNote={currentNote} 
-                    updateNote={updateNote} 
+                <Editor
+                    tempNoteText={tempNoteText}
+                    setTempNoteText={setTempNoteText} 
+                    // currentNote={currentNote} 
+                    // updateNote={updateNote} 
                 />
             </Split>
             :
